@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clarity Input Form — Stakeholder Perspective</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-muted: #888;
+    --rule: #e0ddd8;
+    --rule-strong: #c8c3bb;
+    --accent: #1a3a2a;
+    --accent-light: #2d5c42;
+    --accent-bg: #f0f5f2;
+    --page-bg: #faf9f7;
+    --card-bg: #ffffff;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --role-self: #1a3a5c;
+    --role-self-bg: #eef4fb;
+    --role-leader: #3a1a5c;
+    --role-leader-bg: #f4eefb;
+    --role-leadership: #5c3a1a;
+    --role-leadership-bg: #fbf0ee;
+    --role-peers: #1a5c3a;
+    --role-peers-bg: #eefbf4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    background: var(--page-bg);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .top-bar {
+    background: var(--accent);
+    color: white;
+    padding: 0 48px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .top-bar .brand { font-family: var(--serif); font-size: 16px; }
+  .top-bar .doc-tag { font-size: 11px; opacity: 0.7; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* ── ROLE SELECTOR ── */
+  .role-select-wrapper {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--rule-strong);
+    padding: 32px 48px;
+  }
+  .role-select-wrapper h1 {
+    font-family: var(--serif);
+    font-size: 28px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .role-intro {
+    font-size: 13px;
+    color: var(--ink-soft);
+    max-width: 600px;
+    margin-bottom: 24px;
+  }
+  .about-fields {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .about-fields input {
+    font-family: var(--sans);
+    font-size: 13px;
+    border: none;
+    border-bottom: 1.5px solid var(--rule-strong);
+    background: transparent;
+    padding: 6px 0;
+    outline: none;
+    min-width: 180px;
+    flex: 1;
+    color: var(--ink);
+  }
+  .about-fields input:focus { border-bottom-color: var(--accent); }
+  .about-fields input::placeholder { color: var(--ink-muted); }
+
+  .role-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .role-card {
+    border: 2px solid var(--rule);
+    border-radius: 6px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--card-bg);
+  }
+  .role-card:hover { border-color: var(--accent); }
+  .role-card.selected { border-color: var(--accent); background: var(--accent-bg); }
+  .role-card .role-icon { font-size: 22px; margin-bottom: 8px; }
+  .role-card .role-name { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+  .role-card .role-desc { font-size: 11px; color: var(--ink-muted); line-height: 1.5; }
+
+  /* ── FORM ── */
+  .form-wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 48px 100px;
+  }
+
+  .context-box {
+    background: var(--card-bg);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .context-box .role-pill {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .context-box .context-text { font-size: 13px; color: var(--ink-soft); }
+
+  .q-block {
+    background: var(--card-bg);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .q-header {
+    padding: 14px 20px 12px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--page-bg);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .q-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .q-text { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .q-subtext { font-size: 12px; color: var(--ink-muted); margin-top: 2px; font-weight: 400; }
+  .q-body { padding: 16px 20px; }
+
+  textarea {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: var(--ink);
+    width: 100%;
+    border: 1px solid var(--rule-strong);
+    border-radius: 3px;
+    padding: 10px 12px;
+    background: var(--page-bg);
+    outline: none;
+    resize: vertical;
+    line-height: 1.6;
+    min-height: 100px;
+    transition: border-color 0.15s;
+  }
+  textarea:focus { border-color: var(--accent); background: white; }
+
+  /* ranking list */
+  .rank-list { list-style: none; }
+  .rank-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .rank-num {
+    width: 24px; height: 24px;
+    border-radius: 3px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .rank-item input {
+    font-family: var(--sans);
+    font-size: 13px;
+    flex: 1;
+    border: none;
+    border-bottom: 1px solid var(--rule-strong);
+    background: transparent;
+    padding: 6px 0;
+    outline: none;
+    color: var(--ink);
+  }
+  .rank-item input:focus { border-bottom-color: var(--accent); }
+
+  /* scale */
+  .scale-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .scale-label { font-size: 13px; flex: 1; min-width: 160px; }
+  .scale-options { display: flex; gap: 6px; }
+  .scale-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--rule-strong);
+    background: var(--page-bg);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.1s;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-soft);
+  }
+  .scale-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .scale-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+  .scale-ends { font-size: 10px; color: var(--ink-muted); letter-spacing: 0.04em; }
+
+  /* role-specific questions */
+  .role-specific { display: none; }
+  .role-specific.visible { display: block; }
+
+  /* submit */
+  .submit-area {
+    margin-top: 32px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  .btn-submit {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-submit:hover { background: var(--accent-light); }
+  .btn-print {
+    font-family: var(--sans);
+    font-size: 14px;
+    background: white;
+    color: var(--ink);
+    border: 1px solid var(--rule-strong);
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .btn-print:hover { background: var(--page-bg); }
+
+  /* success state */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 80px 40px;
+    background: var(--card-bg);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    margin-top: 32px;
+  }
+  .success-screen.visible { display: block; }
+  .success-icon { font-size: 40px; margin-bottom: 16px; }
+  .success-screen h2 { font-family: var(--serif); font-size: 24px; color: var(--accent); margin-bottom: 10px; }
+  .success-screen p { font-size: 14px; color: var(--ink-soft); max-width: 460px; margin: 0 auto 24px; line-height: 1.7; }
+
+  /* print */
+  @media print {
+    .top-bar, .role-cards, .role-select-wrapper h1, .role-intro, .submit-area, .about-fields { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .btn-submit, .btn-print { display: none; }
+    .role-card:not(.selected) { display: none; }
+    textarea { border: none; border-bottom: 1px solid #ccc; resize: none; background: transparent; }
+  }
+
+  .section-divider {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    padding: 20px 0 10px;
+    border-top: 1px solid var(--rule);
+    margin-top: 24px;
+  }
+
+  .guidance-banner {
+    background: var(--accent-bg);
+    border: 1px solid #c0d8ca;
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .guidance-banner strong { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="brand">Triangle of Clarity</span>
+  <span class="doc-tag">Stakeholder Input — Personal Clarity</span>
+</div>
+
+<div class="role-select-wrapper">
+  <h1>Stakeholder Input Form</h1>
+  <p class="role-intro">This form captures your perspective on a team member's responsibilities and priorities. Your input will be synthesised with feedback from other stakeholder groups to shape their Personal Clarity Document.</p>
+
+  <div class="about-fields">
+    <input type="text" id="subject-name" placeholder="Team member's name (who this is about)">
+    <input type="text" id="responder-name" placeholder="Your name">
+    <input type="text" id="input-date" placeholder="Date completed (e.g. 14 July 2025)">
+  </div>
+
+  <div class="role-cards">
+    <div class="role-card" onclick="selectRole('self', this)">
+      <div class="role-icon">🙋</div>
+      <div class="role-name">The Individual</div>
+      <div class="role-desc">I am filling this in about myself — my own view of my priorities</div>
+    </div>
+    <div class="role-card" onclick="selectRole('leader', this)">
+      <div class="role-icon">🎯</div>
+      <div class="role-name">Line Leader</div>
+      <div class="role-desc">I am the direct line manager for this individual</div>
+    </div>
+    <div class="role-card" onclick="selectRole('leadership', this)">
+      <div class="role-icon">🧭</div>
+      <div class="role-name">Leadership Team</div>
+      <div class="role-desc">I am part of the wider leadership team — not the direct manager</div>
+    </div>
+    <div class="role-card" onclick="selectRole('peers', this)">
+      <div class="role-icon">🤝</div>
+      <div class="role-name">Peer</div>
+      <div class="role-desc">I work alongside this individual as a colleague or collaborator</div>
+    </div>
+  </div>
+</div>
+
+<div class="form-wrapper" id="form-area" style="display:none;">
+
+  <div class="context-box" id="context-banner">
+    <div class="role-pill" id="role-pill">—</div>
+    <div class="context-text" id="context-text">Select a role above to begin.</div>
+  </div>
+
+  <div class="guidance-banner" id="guidance-text"></div>
+
+  <!-- ── CORE QUESTIONS (all roles) ── -->
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">1</div>
+      <div>
+        <div class="q-text">Top 3–5 priorities</div>
+        <div class="q-subtext">In your view, what should this person be spending most of their time and energy on right now?</div>
+      </div>
+    </div>
+    <div class="q-body">
+      <ul class="rank-list">
+        <li class="rank-item"><div class="rank-num">1</div><input type="text" placeholder="Highest priority…"></li>
+        <li class="rank-item"><div class="rank-num">2</div><input type="text" placeholder="Second priority…"></li>
+        <li class="rank-item"><div class="rank-num">3</div><input type="text" placeholder="Third priority…"></li>
+        <li class="rank-item"><div class="rank-num">4</div><input type="text" placeholder="Fourth priority (optional)…"></li>
+        <li class="rank-item"><div class="rank-num">5</div><input type="text" placeholder="Fifth priority (optional)…"></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">2</div>
+      <div>
+        <div class="q-text">Core responsibilities — what should always be true?</div>
+        <div class="q-subtext">Regardless of which missions or OKRs are active, what are the non-negotiable duties of this role?</div>
+      </div>
+    </div>
+    <div class="q-body">
+      <textarea placeholder="Describe 2–4 enduring responsibilities you believe this person must consistently deliver…"></textarea>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">3</div>
+      <div>
+        <div class="q-text">What does great look like in this role right now?</div>
+        <div class="q-subtext">If this person was excelling over the next 3 months, what would you notice that is different?</div>
+      </div>
+    </div>
+    <div class="q-body">
+      <textarea placeholder="What specific behaviours, outcomes, or contributions would signal this person is thriving?"></textarea>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">4</div>
+      <div>
+        <div class="q-text">Behaviours that matter most</div>
+        <div class="q-subtext">What ways of working are most important for this individual to demonstrate given the current context?</div>
+      </div>
+    </div>
+    <div class="q-body">
+      <textarea placeholder="e.g. Proactive communication across teams, taking ownership without waiting to be asked, escalating risks early…"></textarea>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-header">
+      <div class="q-num">5</div>
+      <div>
+        <div class="q-text">Where do you see the biggest development opportunity?</div>
+        <div class="q-subtext">What is the single most impactful area where growth would unlock more for this person and the team?</div>
+      </div>
+    </div>
+    <div class="q-body">
+      <textarea placeholder="Think about skills, mindset, relationships, or ways of working…"></textarea>
+    </div>
+  </div>
+
+  <!-- ── ROLE-SPECIFIC QUESTIONS ── -->
+
+  <!-- SELF -->
+  <div class="role-specific" id="qs-self">
+    <div class="section-divider">Additional questions — your own perspective</div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">6</div>
+        <div>
+          <div class="q-text">What energises you most in your current role?</div>
+          <div class="q-subtext">What parts of the work do you find most meaningful or motivating?</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="Be honest — this helps ensure your role plays to your strengths…"></textarea>
+      </div>
+    </div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">7</div>
+        <div>
+          <div class="q-text">Where do you feel most stretched or uncertain?</div>
+          <div class="q-subtext">Are there areas where you feel you're operating beyond your current capability or comfort?</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="This is not a performance assessment — it's about identifying where support or development would help…"></textarea>
+      </div>
+    </div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">8</div>
+        <div>
+          <div class="q-text">What would you remove or stop doing to be more effective?</div>
+          <div class="q-subtext">If you could clear one thing from your plate to focus on what matters more, what would it be?</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="Tasks, meetings, processes — anything that feels low-value relative to your time…"></textarea>
+      </div>
+    </div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">9</div>
+        <div>
+          <div class="q-text">What support do you need right now?</div>
+          <div class="q-subtext">From your line leader, the wider team, or the organisation — what would make the biggest difference?</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="Resources, clarity, coaching, relationships, time, tools…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- LINE LEADER -->
+  <div class="role-specific" id="qs-leader">
+    <div class="section-divider">Additional questions — line leader perspective</div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">6</div>
+        <div>
+          <div class="q-text">What do you most want to hold this person accountable for?</div>
+          <div class="q-subtext">The 1–2 things you will be watching most closely over the coming months</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="Be specific about outcomes and timescales where possible…"></textarea>
+      </div>
+    </div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">7</div>
+        <div>
+          <div class="q-text">What do you believe is this person's biggest untapped potential?</div>
+          <div class="q-subtext">Where do you see capability that hasn't yet been fully deployed or developed?</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="Skills, relationships, leadership capacity, domain knowledge…"></textarea>
+      </div>
+    </div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">8</div>
+        <div>
+          <div class="q-text">What would concern you if left unaddressed?</div>
+          <div class="q-subtext">Patterns, gaps, or risks that need to feature in their clarity document</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="Be candid — this input is confidential and used to shape a constructive conversation…"></textarea>
+      </div>
+    </div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">9</div>
+        <div>
+          <div class="q-text">How clearly does this person understand the team's current direction?</div>
+          <div class="q-subtext">Rate your sense of their strategic alignment</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="scale-row">
+          <div class="scale-label">Strategic alignment</div>
+          <div>
+            <div class="scale-options" id="scale-alignment">
+              <button class="scale-btn" onclick="selectScale(this, 'scale-alignment')">1</button>
+              <button class="scale-btn" onclick="selectScale(this, 'scale-alignment')">2</button>
+              <button class="scale-btn" onclick="selectScale(this, 'scale-alignment')">3</button>
+              <button class="scale-btn" onclick="selectScale(this, 'scale-alignment')">4</button>
+              <button class="scale-btn" onclick="selectScale(this, 'scale-alignment')">5</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:9px; letter-spacing:0.04em; color:var(--ink-muted); margin-top:4px; padding: 0 4px;">
+              <span>Not clear</span><span>Very clear</span>
+            </div>
+          </div>
+        </div>
+        <textarea placeholder="Any additional notes on alignment…" style="min-height:60px; margin-top:10px;"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADERSHIP TEAM -->
+  <div class="role-specific" id="qs-leadership">
+    <div class="section-divider">Additional questions — leadership team perspective</div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">6</div>
+        <div>
+          <div class="q-text">Where does this person's work most directly impact our team's strategy?</div>
+          <div class="q-subtext">Which OKRs, missions, or strategic bets are most dependent on their contribution?</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="Reference specific missions or OKRs where relevant…"></textarea>
+      </div>
+    </div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">7</div>
+        <div>
+          <div class="q-text">From a leadership perspective, what do you need to be able to count on from this person?</div>
+          <div class="q-subtext">What would make you confident or concerned when thinking about this individual?</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="Reliability, leadership, judgement, collaboration across the team…"></textarea>
+      </div>
+    </div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">8</div>
+        <div>
+          <div class="q-text">What cross-team collaboration is most important for this individual to invest in?</div>
+          <div class="q-subtext">Which relationships, handoffs, or shared efforts need particular attention?</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="Other team members, external stakeholders, adjacent squads…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- PEERS -->
+  <div class="role-specific" id="qs-peers">
+    <div class="section-divider">Additional questions — peer perspective</div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">6</div>
+        <div>
+          <div class="q-text">Where do you rely on this person most?</div>
+          <div class="q-subtext">What do they do that makes your own work easier, faster, or better?</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="Think about what you'd notice most if they weren't around or weren't performing…"></textarea>
+      </div>
+    </div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">7</div>
+        <div>
+          <div class="q-text">What do they do that creates friction or slows things down?</div>
+          <div class="q-subtext">Any gaps in communication, handoffs, or collaboration that affect your work?</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="Be constructive — this is not about criticism but about patterns worth addressing…"></textarea>
+      </div>
+    </div>
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">8</div>
+        <div>
+          <div class="q-text">What's one thing you wish they did more of (or differently)?</div>
+          <div class="q-subtext">Small shifts that would make a real difference to how well you work together</div>
+        </div>
+      </div>
+      <div class="q-body">
+        <textarea placeholder="Be specific — vague feedback is hard to act on…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- GENERAL CLOSING Q -->
+  <div class="q-block" style="margin-top: 24px;">
+    <div class="q-header">
+      <div class="q-num" style="background: var(--ink-muted);">+</div>
+      <div>
+        <div class="q-text">Anything else worth capturing?</div>
+        <div class="q-subtext">Any context, nuance, or observations that don't fit the questions above</div>
+      </div>
+    </div>
+    <div class="q-body">
+      <textarea placeholder="Open space for anything you feel is important but wasn't covered above…"></textarea>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
+    <button class="btn-submit" onclick="submitForm()">Submit Input ↗</button>
+  </div>
+
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">✓</div>
+    <h2>Input submitted</h2>
+    <p>Thank you — your perspective has been captured. The line leader will synthesise input from all four stakeholder groups before finalising the Personal Clarity Document.</p>
+    <button class="btn-print" onclick="window.print()" style="margin: 0 auto; display:block;">Print a copy for your records</button>
+  </div>
+
+</div>
+
+<script>
+  let currentRole = null;
+
+  const roleConfig = {
+    self: {
+      label: 'The Individual',
+      color: 'var(--role-self)',
+      bg: 'var(--role-self-bg)',
+      context: 'You are completing this about yourself. Be honest and reflective — your perspective is one of four that will be brought together.',
+      guidance: '<strong>Tip:</strong> Try to write as if your coach or line leader was reading this. Be specific about what matters most — not what sounds impressive. Where you feel uncertain, say so.'
+    },
+    leader: {
+      label: 'Line Leader',
+      color: 'var(--role-leader)',
+      bg: 'var(--role-leader-bg)',
+      context: 'You are the direct line manager. Your input carries significant weight — especially around accountability, development, and strategic alignment.',
+      guidance: '<strong>Tip:</strong> Focus on what you need from this person over the next cycle, not a summary of the past. This input feeds directly into their Personal Clarity Document.'
+    },
+    leadership: {
+      label: 'Leadership Team',
+      color: 'var(--role-leadership)',
+      bg: 'var(--role-leadership-bg)',
+      context: 'You are part of the wider leadership team. Your strategic perspective helps connect this individual\'s work to the broader team direction.',
+      guidance: '<strong>Tip:</strong> Think about this person\'s role in the team\'s biggest bets. Where do you most need them to step up, and what does cross-team success look like from their seat?'
+    },
+    peers: {
+      label: 'Peer',
+      color: 'var(--role-peers)',
+      bg: 'var(--role-peers-bg)',
+      context: 'You work alongside this person. Your feedback offers a ground-level perspective that other stakeholders cannot see.',
+      guidance: '<strong>Tip:</strong> Peer feedback is often the most actionable. Be specific about working patterns, collaboration, and day-to-day impact. Constructive honesty is more useful than diplomatic vagueness.'
+    }
+  };
+
+  function selectRole(role, card) {
+    document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    currentRole = role;
+
+    const cfg = roleConfig[role];
+    const pill = document.getElementById('role-pill');
+    pill.textContent = cfg.label;
+    pill.style.background = cfg.bg;
+    pill.style.color = cfg.color;
+    document.getElementById('context-text').textContent = cfg.context;
+    document.getElementById('guidance-text').innerHTML = cfg.guidance;
+
+    document.querySelectorAll('.role-specific').forEach(el => el.classList.remove('visible'));
+    const el = document.getElementById('qs-' + role);
+    if (el) el.classList.add('visible');
+
+    document.getElementById('form-area').style.display = 'block';
+    document.getElementById('success-screen').classList.remove('visible');
+    setTimeout(() => {
+      document.getElementById('form-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  }
+
+  function selectScale(btn, groupId) {
+    document.querySelectorAll('#' + groupId + ' .scale-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  async function submitForm() {
+    const subject = document.getElementById('subject-name').value.trim();
+    const responder = document.getElementById('responder-name').value.trim();
+    if (!subject || !responder) {
+      alert('Please fill in the team member name and your own name before submitting.');
+      return;
+    }
+    if (!currentRole) {
+      alert('Please select your stakeholder role.');
+      return;
+    }
+
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwbWQn5gCK1GuO6sf9L1vYV022WSboIcEPDjDVVEn3qcxswVlUTjT8TfPvOKlyp6RlHmQ/exec';
+
+    const payload = {
+      subjectName: subject,
+      responderName: responder,
+      dateCompleted: document.getElementById('input-date').value,
+      stakeholderRole: roleConfig[currentRole].label,
+      priority1: document.querySelectorAll('.rank-item input')[0].value,
+      priority2: document.querySelectorAll('.rank-item input')[1].value,
+      priority3: document.querySelectorAll('.rank-item input')[2].value,
+      priority4: document.querySelectorAll('.rank-item input')[3].value,
+      priority5: document.querySelectorAll('.rank-item input')[4].value,
+      coreResponsibilities: document.querySelectorAll('textarea')[0].value,
+      greatLooksLike: document.querySelectorAll('textarea')[1].value,
+      keyBehaviours: document.querySelectorAll('textarea')[2].value,
+      developmentOpportunity: document.querySelectorAll('textarea')[3].value,
+      roleQ6: document.querySelector('#qs-' + currentRole + ' textarea:nth-of-type(1)')?.value || '',
+      roleQ7: document.querySelector('#qs-' + currentRole + ' textarea:nth-of-type(2)')?.value || '',
+      roleQ8: document.querySelector('#qs-' + currentRole + ' textarea:nth-of-type(3)')?.value || '',
+      roleQ9: document.querySelector('#qs-' + currentRole + ' textarea:nth-of-type(4)')?.value || '',
+      additionalNotes: document.querySelectorAll('textarea')[document.querySelectorAll('textarea').length - 1].value
+    };
+
+    try {
+      await fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      document.getElementById('success-screen').classList.add('visible');
+      document.getElementById('success-screen').scrollIntoView({ behavior: 'smooth' });
+    } catch (err) {
+      alert('Something went wrong submitting the form. Please try again or contact your administrator.');
+    }
+  }
+</script>
+</body>
+</html>
