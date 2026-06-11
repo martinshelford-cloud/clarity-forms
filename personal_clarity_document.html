@@ -201,7 +201,14 @@
     margin-top: 7px;
     flex-shrink: 0;
   }
-  .clarity-table textarea, .clarity-table input[type="text"] {
+  .clarity-table textarea {
+    display: none;
+  }
+  .clarity-table input[type="text"]:not([id]) {
+    display: none;
+  }
+  /* Energy table inputs keep their normal styling */
+  #energy-label-1, #energy-label-2, #energy-label-3, #energy-label-4, #energy-label-5 {
     font-family: var(--sans);
     font-size: 13px;
     color: var(--ink);
@@ -211,16 +218,100 @@
     padding: 7px 10px;
     background: transparent;
     outline: none;
-    resize: none;
     line-height: 1.55;
-    min-height: 38px;
     transition: all 0.15s;
+    display: block;
   }
-  .clarity-table textarea:focus, .clarity-table input[type="text"]:focus {
+  #energy-label-1:focus, #energy-label-2:focus, #energy-label-3:focus,
+  #energy-label-4:focus, #energy-label-5:focus {
     border-color: var(--navy);
     background: var(--accent-bg);
   }
-  .clarity-table textarea::placeholder, .clarity-table input[type="text"]::placeholder { color: #bbb; }
+  #energy-0, #energy-1, #energy-2, #energy-3, #energy-4, #energy-5 {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    width: 100%;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    padding: 7px 10px;
+    background: transparent;
+    outline: none;
+    text-align: center;
+    transition: all 0.15s;
+    display: block;
+  }
+  #energy-0:focus, #energy-1:focus, #energy-2:focus,
+  #energy-3:focus, #energy-4:focus, #energy-5:focus {
+    border-color: var(--navy);
+    background: var(--accent-bg);
+  }
+  .cell-input {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink);
+    width: 100%;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    padding: 7px 10px;
+    background: transparent;
+    outline: none;
+    line-height: 1.55;
+    min-height: 38px;
+    transition: all 0.15s;
+    display: block;
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+  .cell-input:focus {
+    border-color: var(--navy);
+    background: var(--accent-bg);
+  }
+  .cell-input:empty:before {
+    content: attr(data-placeholder);
+    color: #bbb;
+    pointer-events: none;
+  }
+  .cell-input-single {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink);
+    width: 100%;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    padding: 7px 10px;
+    background: transparent;
+    outline: none;
+    line-height: 1.55;
+    min-height: 38px;
+    transition: all 0.15s;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .cell-input-single:focus {
+    border-color: var(--navy);
+    background: var(--accent-bg);
+    white-space: normal;
+    overflow: visible;
+  }
+  .cell-input-single:empty:before {
+    content: attr(data-placeholder);
+    color: #bbb;
+    pointer-events: none;
+  }
+  @media print {
+    .cell-input, .cell-input-single {
+      border: none !important;
+      border-bottom: 1px solid #ddd !important;
+      background: transparent !important;
+      white-space: pre-wrap !important;
+      overflow: visible !important;
+      min-height: 0 !important;
+    }
+    .cell-input:empty:before, .cell-input-single:empty:before { display: none; }
+  }
 
   /* ── ENERGY TABLE ── */
   .energy-total-row td {
@@ -379,8 +470,15 @@
     .toolbar { display: none; }
     .top-bar, .meta-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .section { break-inside: avoid; }
-    .clarity-table textarea, .clarity-table input[type="text"] { border: none; border-bottom: 1px solid #ddd; background: transparent; }
-    textarea.standalone { border: none; border-bottom: 1px solid #ddd; background: transparent; resize: none; }
+    .cell-input, .cell-input-single {
+      border: none !important;
+      border-bottom: 1px solid #ddd !important;
+      background: transparent !important;
+      white-space: pre-wrap !important;
+      overflow: visible !important;
+      min-height: 0 !important;
+    }
+    .cell-input:empty:before, .cell-input-single:empty:before { display: none; }
     .anchor-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .energy-total-row.over-100 td { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
@@ -398,15 +496,15 @@
 <div class="meta-bar">
   <div class="meta-field">
     <label>Name</label>
-    <input type="text" id="meta-name" placeholder="Full name">
+    <div class="cell-input-single" contenteditable="true" data-placeholder="Full name"></div>
   </div>
   <div class="meta-field">
     <label>Role / Title</label>
-    <input type="text" id="meta-role" placeholder="Job title">
+    <div class="cell-input-single" contenteditable="true" data-placeholder="Job title"></div>
   </div>
   <div class="meta-field">
     <label>Line Leader</label>
-    <input type="text" id="meta-leader" placeholder="Name">
+    <div class="cell-input-single" contenteditable="true" data-placeholder="Name"></div>
   </div>
   <div class="meta-field">
     <label>Start Date</label>
@@ -451,11 +549,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td><div class="row-num">1</div></td><td><textarea placeholder="Describe the core responsibility…"></textarea></td><td><textarea placeholder="How is success measured?"></textarea></td></tr>
-          <tr><td><div class="row-num">2</div></td><td><textarea placeholder="Describe the core responsibility…"></textarea></td><td><textarea placeholder="How is success measured?"></textarea></td></tr>
-          <tr><td><div class="row-num">3</div></td><td><textarea placeholder="Describe the core responsibility…"></textarea></td><td><textarea placeholder="How is success measured?"></textarea></td></tr>
-          <tr><td><div class="row-num">4</div></td><td><textarea placeholder="Describe the core responsibility…"></textarea></td><td><textarea placeholder="How is success measured?"></textarea></td></tr>
-          <tr><td><div class="row-num">5</div></td><td><textarea placeholder="Describe the core responsibility…"></textarea></td><td><textarea placeholder="How is success measured?"></textarea></td></tr>
+          <tr><td><div class="row-num">1</div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the core responsibility…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How is success measured?"></div></td></tr>
+          <tr><td><div class="row-num">2</div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the core responsibility…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How is success measured?"></div></td></tr>
+          <tr><td><div class="row-num">3</div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the core responsibility…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How is success measured?"></div></td></tr>
+          <tr><td><div class="row-num">4</div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the core responsibility…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How is success measured?"></div></td></tr>
+          <tr><td><div class="row-num">5</div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the core responsibility…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How is success measured?"></div></td></tr>
         </tbody>
       </table>
     </div>
@@ -479,11 +577,11 @@
           </tr>
         </thead>
         <tbody id="okr-table-body">
-          <tr><td><div class="row-num">1</div></td><td><input type="text" oninput="syncEnergyRow(0,this.value)" placeholder="Mission or OKR name…"></td><td><textarea placeholder="Your specific role and deliverables…"></textarea></td><td><textarea placeholder="How is success measured?"></textarea></td></tr>
-          <tr><td><div class="row-num">2</div></td><td><input type="text" oninput="syncEnergyRow(1,this.value)" placeholder="Mission or OKR name…"></td><td><textarea placeholder="Your specific role and deliverables…"></textarea></td><td><textarea placeholder="How is success measured?"></textarea></td></tr>
-          <tr><td><div class="row-num">3</div></td><td><input type="text" oninput="syncEnergyRow(2,this.value)" placeholder="Mission or OKR name…"></td><td><textarea placeholder="Your specific role and deliverables…"></textarea></td><td><textarea placeholder="How is success measured?"></textarea></td></tr>
-          <tr><td><div class="row-num">4</div></td><td><input type="text" oninput="syncEnergyRow(3,this.value)" placeholder="Mission or OKR name…"></td><td><textarea placeholder="Your specific role and deliverables…"></textarea></td><td><textarea placeholder="How is success measured?"></textarea></td></tr>
-          <tr><td><div class="row-num">5</div></td><td><input type="text" oninput="syncEnergyRow(4,this.value)" placeholder="Mission or OKR name…"></td><td><textarea placeholder="Your specific role and deliverables…"></textarea></td><td><textarea placeholder="How is success measured?"></textarea></td></tr>
+          <tr><td><div class="row-num">1</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Mission or OKR name…" oninput="syncEnergyRow(0,this.textContent)"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Your specific role and deliverables…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How is success measured?"></div></td></tr>
+          <tr><td><div class="row-num">2</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Mission or OKR name…" oninput="syncEnergyRow(1,this.textContent)"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Your specific role and deliverables…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How is success measured?"></div></td></tr>
+          <tr><td><div class="row-num">3</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Mission or OKR name…" oninput="syncEnergyRow(2,this.textContent)"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Your specific role and deliverables…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How is success measured?"></div></td></tr>
+          <tr><td><div class="row-num">4</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Mission or OKR name…" oninput="syncEnergyRow(3,this.textContent)"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Your specific role and deliverables…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How is success measured?"></div></td></tr>
+          <tr><td><div class="row-num">5</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Mission or OKR name…" oninput="syncEnergyRow(4,this.textContent)"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Your specific role and deliverables…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How is success measured?"></div></td></tr>
         </tbody>
       </table>
     </div>
@@ -558,16 +656,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td><div class="row-num">1</div></td><td><input type="text" placeholder="Core / Mission / OKR…"></td><td><textarea placeholder="Describe the specific goal…"></textarea></td><td><textarea placeholder="How will you measure it?"></textarea></td></tr>
-          <tr><td><div class="row-num">2</div></td><td><input type="text" placeholder="Core / Mission / OKR…"></td><td><textarea placeholder="Describe the specific goal…"></textarea></td><td><textarea placeholder="How will you measure it?"></textarea></td></tr>
-          <tr><td><div class="row-num">3</div></td><td><input type="text" placeholder="Core / Mission / OKR…"></td><td><textarea placeholder="Describe the specific goal…"></textarea></td><td><textarea placeholder="How will you measure it?"></textarea></td></tr>
-          <tr><td><div class="row-num">4</div></td><td><input type="text" placeholder="Core / Mission / OKR…"></td><td><textarea placeholder="Describe the specific goal…"></textarea></td><td><textarea placeholder="How will you measure it?"></textarea></td></tr>
-          <tr><td><div class="row-num">5</div></td><td><input type="text" placeholder="Core / Mission / OKR…"></td><td><textarea placeholder="Describe the specific goal…"></textarea></td><td><textarea placeholder="How will you measure it?"></textarea></td></tr>
-          <tr><td><div class="row-num">6</div></td><td><input type="text" placeholder="Core / Mission / OKR…"></td><td><textarea placeholder="Describe the specific goal…"></textarea></td><td><textarea placeholder="How will you measure it?"></textarea></td></tr>
-          <tr><td><div class="row-num">7</div></td><td><input type="text" placeholder="Core / Mission / OKR…"></td><td><textarea placeholder="Describe the specific goal…"></textarea></td><td><textarea placeholder="How will you measure it?"></textarea></td></tr>
-          <tr><td><div class="row-num">8</div></td><td><input type="text" placeholder="Core / Mission / OKR…"></td><td><textarea placeholder="Describe the specific goal…"></textarea></td><td><textarea placeholder="How will you measure it?"></textarea></td></tr>
-          <tr><td><div class="row-num">9</div></td><td><input type="text" placeholder="Core / Mission / OKR…"></td><td><textarea placeholder="Describe the specific goal…"></textarea></td><td><textarea placeholder="How will you measure it?"></textarea></td></tr>
-          <tr><td><div class="row-num">10</div></td><td><input type="text" placeholder="Core / Mission / OKR…"></td><td><textarea placeholder="Describe the specific goal…"></textarea></td><td><textarea placeholder="How will you measure it?"></textarea></td></tr>
+          <tr><td><div class="row-num">1</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Core / Mission / OKR…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the specific goal…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How will you measure it?"></div></td></tr>
+          <tr><td><div class="row-num">2</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Core / Mission / OKR…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the specific goal…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How will you measure it?"></div></td></tr>
+          <tr><td><div class="row-num">3</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Core / Mission / OKR…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the specific goal…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How will you measure it?"></div></td></tr>
+          <tr><td><div class="row-num">4</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Core / Mission / OKR…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the specific goal…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How will you measure it?"></div></td></tr>
+          <tr><td><div class="row-num">5</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Core / Mission / OKR…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the specific goal…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How will you measure it?"></div></td></tr>
+          <tr><td><div class="row-num">6</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Core / Mission / OKR…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the specific goal…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How will you measure it?"></div></td></tr>
+          <tr><td><div class="row-num">7</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Core / Mission / OKR…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the specific goal…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How will you measure it?"></div></td></tr>
+          <tr><td><div class="row-num">8</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Core / Mission / OKR…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the specific goal…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How will you measure it?"></div></td></tr>
+          <tr><td><div class="row-num">9</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Core / Mission / OKR…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the specific goal…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How will you measure it?"></div></td></tr>
+          <tr><td><div class="row-num">10</div></td><td><div class="cell-input-single" contenteditable="true" data-placeholder="Core / Mission / OKR…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Describe the specific goal…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="How will you measure it?"></div></td></tr>
         </tbody>
       </table>
     </div>
@@ -590,11 +688,11 @@
           </tr>
         </thead>
         <tbody id="behaviour-container">
-          <tr><td><div class="row-num">1</div></td><td><textarea placeholder="e.g. Communicates with radical candour — gives feedback early, directly, and constructively…"></textarea></td><td><textarea placeholder="What does this look like in practice?"></textarea></td></tr>
-          <tr><td><div class="row-num">2</div></td><td><textarea placeholder="Behaviour…"></textarea></td><td><textarea placeholder="What does this look like in practice?"></textarea></td></tr>
-          <tr><td><div class="row-num">3</div></td><td><textarea placeholder="Behaviour…"></textarea></td><td><textarea placeholder="What does this look like in practice?"></textarea></td></tr>
-          <tr><td><div class="row-num">4</div></td><td><textarea placeholder="Behaviour…"></textarea></td><td><textarea placeholder="What does this look like in practice?"></textarea></td></tr>
-          <tr><td><div class="row-num">5</div></td><td><textarea placeholder="Behaviour…"></textarea></td><td><textarea placeholder="What does this look like in practice?"></textarea></td></tr>
+          <tr><td><div class="row-num">1</div></td><td><div class="cell-input" contenteditable="true" data-placeholder="e.g. Communicates with radical candour — gives feedback early, directly, and constructively…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="What does this look like in practice?"></div></td></tr>
+          <tr><td><div class="row-num">2</div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Behaviour…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="What does this look like in practice?"></div></td></tr>
+          <tr><td><div class="row-num">3</div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Behaviour…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="What does this look like in practice?"></div></td></tr>
+          <tr><td><div class="row-num">4</div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Behaviour…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="What does this look like in practice?"></div></td></tr>
+          <tr><td><div class="row-num">5</div></td><td><div class="cell-input" contenteditable="true" data-placeholder="Behaviour…"></div></td><td><div class="cell-input" contenteditable="true" data-placeholder="What does this look like in practice?"></div></td></tr>
         </tbody>
       </table>
     </div>
@@ -612,21 +710,21 @@
         <div class="anchor-label">◆ Current anchor goal</div>
         <div class="field-group">
           <div class="field-label">What am I focused on developing?</div>
-          <textarea class="standalone" placeholder="e.g. Developing executive-level communication and stakeholder influence skills…"></textarea>
+          <div class="cell-input" contenteditable="true" data-placeholder="e.g. Developing executive-level communication and stakeholder influence skills…" style="min-height:72px; border:1px solid var(--rule-strong); border-radius:3px; background:var(--page-bg);"></div>
         </div>
         <div class="anchor-grid">
           <div class="field-group">
             <div class="field-label">Why does this matter now?</div>
-            <textarea class="standalone" placeholder="Link to current mission or OKR…" style="min-height:72px;"></textarea>
+            <div class="cell-input" contenteditable="true" data-placeholder="Link to current mission or OKR…" style="min-height:72px; border:1px solid var(--rule-strong); border-radius:3px; background:var(--page-bg);"></div>
           </div>
           <div class="field-group">
             <div class="field-label">How will progress be measured?</div>
-            <textarea class="standalone" placeholder="Observable indicators of growth…" style="min-height:72px;"></textarea>
+            <div class="cell-input" contenteditable="true" data-placeholder="Observable indicators of growth…" style="min-height:72px; border:1px solid var(--rule-strong); border-radius:3px; background:var(--page-bg);"></div>
           </div>
         </div>
         <div class="field-group" style="margin-top:12px;">
           <div class="field-label">Target timeframe</div>
-          <input class="standalone" type="text" placeholder="e.g. 3 months — reviewed at next PCD update">
+          <div class="cell-input-single" contenteditable="true" data-placeholder="e.g. 3 months — reviewed at next PCD update" style="border:1px solid var(--rule-strong); border-radius:3px; background:var(--page-bg);"></div>
         </div>
       </div>
     </div>
@@ -644,21 +742,21 @@
         <div class="signoff-block">
           <div class="role">Individual</div>
           <div class="input-label">Name</div>
-          <input type="text" placeholder="Full name">
+          <div class="cell-input-single" contenteditable="true" data-placeholder="Full name"></div>
           <div class="input-label">Date signed</div>
           <input type="date">
         </div>
         <div class="signoff-block">
           <div class="role">Line Leader</div>
           <div class="input-label">Name</div>
-          <input type="text" placeholder="Full name">
+          <div class="cell-input-single" contenteditable="true" data-placeholder="Full name"></div>
           <div class="input-label">Date signed</div>
           <input type="date">
         </div>
         <div class="signoff-block">
           <div class="role">Leadership Team</div>
           <div class="input-label">Name</div>
-          <input type="text" placeholder="Full name">
+          <div class="cell-input-single" contenteditable="true" data-placeholder="Full name"></div>
           <div class="input-label">Date signed</div>
           <input type="date">
         </div>
@@ -684,8 +782,9 @@
   function syncEnergyRow(index, value) {
     const label = document.getElementById('energy-label-' + (index + 1));
     if (label) {
-      label.value = value;
-      label.style.color = value ? 'var(--ink)' : 'var(--ink-muted)';
+      const clean = (value || '').trim().replace(/\n/g, ' ');
+      label.value = clean;
+      label.style.color = clean ? 'var(--ink)' : 'var(--ink-muted)';
     }
   }
 
@@ -709,11 +808,15 @@
   // Clear all
   function clearAll() {
     if (!confirm('Clear all entered data and start fresh?')) return;
-    document.querySelectorAll('input[type="text"], input[type="date"], textarea, select').forEach(el => {
+    // Clear standard inputs
+    document.querySelectorAll('input[type="text"], input[type="date"], select').forEach(el => {
       if (el.tagName === 'SELECT') el.value = 'Draft';
       else el.value = '';
     });
-    // Reset energy label colours
+    // Clear contenteditable divs
+    document.querySelectorAll('.cell-input, .cell-input-single').forEach(el => {
+      el.textContent = '';
+    });
     for (let i = 1; i <= 5; i++) {
       const l = document.getElementById('energy-label-' + i);
       if (l) l.style.color = 'var(--ink-muted)';
